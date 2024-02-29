@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import { ref } from 'vue';
 
+let isActive = ref(false);
+
+function toggleMenu(){
+  isActive.value = !isActive.value;
+  console.log({ isActive: isActive.value })
+}
 
 </script>
 
@@ -11,16 +18,16 @@ import { RouterLink } from 'vue-router';
       <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
     </a>
 
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+    <a role="button" @click="toggleMenu" :class="{ 'is-active': isActive} " class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
     </a>
   </div>
 
-  <div id="navbarBasicExample" class="navbar-menu">
+  <div id="navbarBasicExample" class="navbar-menu" :class="{ 'is-active': isActive} ">
     <div class="navbar-start">
-      <RouterLink to="/" active-class="is-active" class="navbar-item">
+      <RouterLink to="/" class="navbar-item">
         Home
       </RouterLink>
 
@@ -68,10 +75,7 @@ import { RouterLink } from 'vue-router';
 </template>
 
 <style scoped>
-    .router-link-exact-active{
-        border-bottom: 2px solid hotpink;
-    }
     .router-link-active{
-        background-color: pink;
+        border-bottom: 2px solid hotpink;
     }
 </style>
