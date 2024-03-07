@@ -4,57 +4,54 @@
 
     const products = ref([] as Product[])
 
+    type CartItem = {
+        product: Product,
+        quantity: number
+    }
+    const cart = ref([] as CartItem[])
+
+    function addToCart(product: Product){
+        const item = cart.value.find(item => item.product.id === product.id)
+        if (item){
+            item.quantity++
+        }
+        else{
+            cart.value.push({ product, quantity: 1 })
+        }
+    }
+
     products.value = getProducts()
 
 
 </script>
 
 <template>
-    <!-- <div class="hero is-primary">
-        <div class="hero-body">
-            <h1>Products</h1>
-        </div>
-
-    </div> -->
-
     <div class="product-list">
         <div class="card" v-for="product in products" :key="product.id">
             <div class="card-image">
-                <!-- <figure class="image is-4by3">
-                <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                </figure>
-            </div>
-            <div class="card-content">
-                <div class="media">
-                <div class="media-left">
-                    <figure class="image is-48x48">
-                    <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                    </figure>
-                </div>
-                <div class="media-content">
-                    <p class="title is-4">John Smith</p>
-                    <p class="subtitle is-6">@johnsmith</p>
-                </div>
-                </div>
-
-                <div class="content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                <a href="#">#css</a> <a href="#">#responsive</a>
-                <br>
-                <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                </div>
-            </div> -->
-
-            <img :src="product.thumbnail" :alt="product.title"/>
+                <img :src="product.thumbnail" :alt="product.title"/>
             </div>
 
             <div class="card-content">
                 <p class="price"> ${{ product.price }}</p>
                 <h3> {{ product.title }}</h3>
                 <p> {{ product.description }}</p>
+                <button @click="addToCart(product)" class="button is-primary"> Add to Cart</button>
             </div>
         </div> 
+    </div>
+
+    <div class="flyout">
+        <h1 class="title">
+            The Cart
+        </h1>
+        <u1>
+            <li v-for="item in cart" :key="item.product.id">
+                <img :src="item.product.thumbnail" :alt="item.product.title" />
+                {{ item.product.title }} x {{ item.quantity }} = ${{ item.product.price }}
+            </li>
+        </u1>
+        {{ cart.length }} items totaling ${{ cart.reduce((total, item) => total + item.product.price * item.quantity, 0) }}
     </div>
 </template>
 
@@ -80,6 +77,25 @@
         font-size: xx-large;
         color: hotpink;
         float: right;
+    }
+
+    .flyout{
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 20rem;
+        height: 100%;
+        background-color: white;
+        border: 1px solid hotpink;
+        z-index: 100;
+        box-shadow: -1px 0 5px 0 rgba(0,0,0,.5);
+        transform: translateX(80%);
+        transition: transform 1s;
+        padding: 1rem;
+    }
+
+    .flyout.open, .flyout:hover{
+        transform: translateX(0);
     }
 
 </style>
