@@ -24,16 +24,6 @@
     }
 
     const total = computed( () => cart.value.reduce((total, item) => total + item.product.price * item.quantity, 0) )
-
-    // function addToCart2 = (product: Product) => {
-    //     const item = cart.value.find(item => item.product.id === product.id)
-    //     if (item){
-    //         item.quantity++
-    //     }
-    //     else{
-    //         cart.value.push({ product, quantity: 1 })
-    //     }
-    // }
 </script>
 
 <template>
@@ -57,7 +47,7 @@
         <h1 class="title">
             The Cart
         </h1>
-        <u1>
+        <u1 class="cart">
             <li v-for="item in cart" :key="item.product.id">
                 <img :src="item.product.thumbnail" :alt="item.product.title" />
                 {{ item.product.title }} x {{ item.quantity }} = ${{ item.product.price }}
@@ -109,6 +99,18 @@
 
     .flyout.open, .flyout:hover{
         transform: translateX(0);
+    }
+
+    .cart li {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+    }
+
+    .cart img {
+        width: 3rem;
+        height: 3rem;
+        margin-right: 1rem;
     }
 
 </style>
