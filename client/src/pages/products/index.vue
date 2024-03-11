@@ -1,8 +1,10 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
-    import {type Product, getProducts } from '@/model/products'
+    import { ref, computed } from 'vue'
+    import { type Product, getProducts } from '@/model/products'
 
     const products = ref([] as Product[])
+
+    products.value = getProducts()
 
     type CartItem = {
         product: Product,
@@ -11,6 +13,7 @@
     const cart = ref([] as CartItem[])
 
     function addToCart(product: Product){
+        const itemPredicate = (item: CartItem) => item.product.id === product.id
         const item = cart.value.find(item => item.product.id === product.id)
         if (item){
             item.quantity++
@@ -20,9 +23,17 @@
         }
     }
 
-    products.value = getProducts()
+    const total = computed( () => cart.value.reduce((total, item) => total + item.product.price * item.quantity, 0) )
 
-
+    // function addToCart2 = (product: Product) => {
+    //     const item = cart.value.find(item => item.product.id === product.id)
+    //     if (item){
+    //         item.quantity++
+    //     }
+    //     else{
+    //         cart.value.push({ product, quantity: 1 })
+    //     }
+    // }
 </script>
 
 <template>
@@ -35,6 +46,7 @@
             <div class="card-content">
                 <p class="price"> ${{ product.price }}</p>
                 <h3> {{ product.title }}</h3>
+                <i> {{ product.brand }}</i>
                 <p> {{ product.description }}</p>
                 <button @click="addToCart(product)" class="button is-primary"> Add to Cart</button>
             </div>
@@ -51,7 +63,8 @@
                 {{ item.product.title }} x {{ item.quantity }} = ${{ item.product.price }}
             </li>
         </u1>
-        {{ cart.length }} items totaling ${{ cart.reduce((total, item) => total + item.product.price * item.quantity, 0) }}
+        <!-- {{ cart.length }} items totaling ${{ cart.reduce((total, item) => total + item.product.price * item.quantity, 0) }} -->
+        {{ cart.length }} items totalling ${{ total }}
     </div>
 </template>
 
