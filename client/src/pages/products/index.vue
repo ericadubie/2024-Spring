@@ -57,4 +57,15 @@
         justify-content: space-around;
     }
 
+    .cart li {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+    }
+    .cart img {
+        width: 3rem;
+        height: 3rem;
+        margin-right: 1rem;
+    }
+
 </style>
