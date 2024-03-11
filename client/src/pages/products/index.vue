@@ -54,7 +54,7 @@
             </li>
         </u1>
         <!-- {{ cart.length }} items totaling ${{ cart.reduce((total, item) => total + item.product.price * item.quantity, 0) }} -->
-        {{ cart.length }} items totalling ${{ total }}
+        {{ cart.length }} items totaling ${{ total }}
     </div>
 </template>
 
