@@ -2,30 +2,15 @@
     import { ref, computed } from 'vue'
     import { type Product, getProducts } from '@/model/products'
     import ProductCard from "@/components/ProductCard.vue"
-    import FlyOut from "@/components/FlyOut.vue"
+    import FlyOut from '@/components/FlyOut.vue';
+    import { addToCart, isOpen } from '@/viewModel/cart';
+    import ShoppingCart from '@/components/ShoppingCart.vue';
 
     const products = ref([] as Product[])
 
     products.value = getProducts()
 
-    type CartItem = {
-        product: Product,
-        quantity: number
-    }
-    const cart = ref([] as CartItem[])
-
-    function addToCart(product: Product){
-        const itemPredicate = (item: CartItem) => item.product.id === product.id
-        const item = cart.value.find(item => item.product.id === product.id)
-        if (item){
-            item.quantity++
-        }
-        else{
-            cart.value.push({ product, quantity: 1 })
-        }
-    }
-
-    const total = computed( () => cart.value.reduce((total, item) => total + item.product.price * item.quantity, 0) )
+    
 </script>
 
 <template>
@@ -35,19 +20,10 @@
 
     </div>
 
-    <FlyOut>
-        <h1 class="title">
-            The Cart
-        </h1>
-        <u1 class="cart">
-            <li v-for="item in cart" :key="item.product.id">
-                <img :src="item.product.thumbnail" :alt="item.product.title" />
-                {{ item.product.title }} x {{ item.quantity }} = ${{ item.product.price }}
-            </li>
-        </u1>
-        <!-- {{ cart.length }} items totaling ${{ cart.reduce((total, item) => total + item.product.price * item.quantity, 0) }} -->
-        {{ cart.length }} items totaling ${{ total }}
+    <FlyOut :isOpen="isOpen" >
+        <ShoppingCart />
     </FlyOut>
+    
 </template>
 
 <style scoped>
