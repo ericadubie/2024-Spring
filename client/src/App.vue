@@ -5,14 +5,18 @@ import NavBar from './components/NavBar.vue';
 </script>
 
 <template>
-  <NavBar />
+  <div class="wrapper">
+    <NavBar />
     <div class="container">
       <RouterView />
     </div>
+  </div>
 
   
 </template>
 
 <style scoped>
-
+  .wrapper{
+    margin-right: 2rem;
+  }
 </style>
