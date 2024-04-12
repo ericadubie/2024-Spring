@@ -1,3 +1,5 @@
+/* B"H
+ */
 const fs = require("fs/promises");
 
 const fileName = __dirname + "/../data/users.json";
@@ -6,10 +8,7 @@ const fileName = __dirname + "/../data/users.json";
 const dataP = fs
   .access(fileName, fs.constants.F_OK)
   .then(() => fs.readFile(fileName, "utf8"))
-  .then((content) => JSON.parse(content))
-  .catch((err) => {
-    console.error(err);
-  });
+  .then((content) => JSON.parse(content));
 
 async function save() {
   const data = await dataP;
@@ -65,12 +64,8 @@ async function add(user) {
   data.items.push(user);
   console.log("2: About to save");
 
-  try {
-    await save();
-    console.log("3: Saved");
-  } catch (error) {
-    console.error(error);
-  }
+  await save();
+  console.log("3: Saved");
 
   console.log("4: About to return user");
   return user;
@@ -88,7 +83,7 @@ async function update(user) {
       ...data.items[index],
       ...user,
     };
-    await save().catch(console.error);
+    await save();
     return user;
   }
   return null;
@@ -103,7 +98,7 @@ async function remove(id) {
   const index = data.items.findIndex((item) => item.id == id);
   if (index >= 0) {
     const deleted = data.items.splice(index, 1);
-    await save().catch(console.error);
+    await save();
     return deleted[0];
   }
   return null;
