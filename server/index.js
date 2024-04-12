@@ -1,15 +1,19 @@
-const express = require('express');
-const users = require('./controllers/users');
+const express = require("express");
+const users = require("./controllers/users");
 
-const app=express();
+const app = express();
 const PORT = 3000;
 
-app.get('/', (req, res) => {
-    res.send('Hello Express!')
-})
-.use('/api/v1/users', users)
+app.use(express.json());
+
+app
+  .get("/", (req, res) => {
+    res.send("Hello New Paltz!");
+  })
+  .use("/api/v1/users", users);
+
+// Error handling
 
 app.listen(PORT, () => {
-    console.log(`App listening at http://localhost:${PORT}`)
+  console.log(`App listening at http://localhost:${PORT}`);
 });
-
