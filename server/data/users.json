@@ -1980,10 +1980,10 @@
             }
         },
         {
-            "firstName": "Moshe",
+            "firstName": "Prof. Moshe",
             "lastName": "Plotkin",
             "email": "plotkinm@newpaltz.edu",
-            "id": 31
+            "id": "31"
         }
     ],
     "total": 100,

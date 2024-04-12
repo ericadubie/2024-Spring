@@ -5,30 +5,53 @@ const fileName = __dirname + "/../data/users.json";
 /** @type { { items: User[] } } */
 let data; //= require('../data/users.json');
 
-fs.access(fileName, fs.constants.F_OK, (err) => {
-  if (!err) {
-    fs.readFile(fileName, "utf8", (err, content) => {
+function isFileAccessible(fileName) {
+  return new Promise((resolve, reject) => {
+    fs.access(fileName, fs.constants.F_OK, (err) => {
       if (err) {
-        console.error(err);
+        reject(err);
         return;
       }
-      data = JSON.parse(content);
+      resolve();
     });
-  }
-});
-
-function save(callback) {
-  fs.writeFile(fileName, JSON.stringify(data, null, 2), (err) => {
-    if (err) {
-      console.error(err);
-      if (callback) {
-        callback(err);
-      }
-    }
-    if (callback) {
-      callback();
-    }
   });
+}
+
+function readFile(fileName) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(fileName, "utf8", (err, content) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(content);
+    });
+  });
+}
+
+function writeFile(fileName, content) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(fileName, content, (err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
+isFileAccessible(fileName)
+  .then(() => readFile(fileName))
+  .then((content) => {
+    data = JSON.parse(content);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+
+function save() {
+  return writeFile(fileName, JSON.stringify(data, null, 2));
 }
 
 /**
@@ -73,7 +96,7 @@ function search(q) {
 function add(user) {
   user.id = data.items.length + 1;
   data.items.push(user);
-  save();
+  save().catch(console.error);
   return user;
 }
 
@@ -88,7 +111,7 @@ function update(user) {
       ...data.items[index],
       ...user,
     };
-    save();
+    save().catch(console.error);
     return user;
   }
   return null;
@@ -102,7 +125,7 @@ function remove(id) {
   const index = data.items.findIndex((item) => item.id == id);
   if (index >= 0) {
     const deleted = data.items.splice(index, 1);
-    save();
+    save().catch(console.error);
     return deleted[0];
   }
   return null;
