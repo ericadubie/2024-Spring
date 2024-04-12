@@ -25,7 +25,6 @@ function save() {
 /**
  * @returns {User[]}
  * */
-
 function getAll() {
   return data.items.map((x) => ({
     ...x,
@@ -39,14 +38,17 @@ function getAll() {
  * @param {number} id
  * @returns {User}
  * */
-
 function get(id) {
   return data.items.find((item) => item.id == id);
 }
 
+/**
+ * @param {string} q
+ * @returns {User[]}
+ * */
 function search(q) {
   return getAll().filter(
-    (item) => (item) =>
+    (item) =>
       new RegExp(q, "i").test(item.firstName) ||
       new RegExp(q, "i").test(item.lastName) ||
       new RegExp(q, "i").test(item.email)
@@ -57,13 +59,18 @@ function search(q) {
  * @param {User} user
  * @returns {User}
  * */
-function add(user) {
+async function add(user) {
   user.id = data.items.length + 1;
   data.items.push(user);
   console.log("2: About to save");
-  save()
-    .then(() => console.log("3: Saved"))
-    .catch(console.error);
+
+  try {
+    await save();
+    console.log("3: Saved");
+  } catch (error) {
+    console.error(error);
+  }
+
   console.log("4: About to return user");
   return user;
 }
