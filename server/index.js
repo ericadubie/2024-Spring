@@ -1,5 +1,6 @@
 const express = require("express");
 const users = require("./controllers/users");
+const products = require("./controllers/products");
 /* 
 Four types of Asynchronous code:
     1. Node Style Callbacks
@@ -28,7 +29,8 @@ app
   .get("/", (req, res) => {
     res.send("Hello New Paltz!");
   })
-  .use("/api/v1/users", users);
+  .use("/api/v1/users", users)
+  .use("/api/v1/products", products);
 
 // Error handling
 app.use((err, req, res, next) => {
