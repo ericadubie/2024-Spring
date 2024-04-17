@@ -7,5 +7,5 @@ export function rest(url: string) {
 }
 
 export function api<T>(action: string): Promise<DataEnvelope<T>> {
-  return rest(`API_ROOT/${action}`);
+  return rest(`${API_ROOT}/${action}`);
 }
