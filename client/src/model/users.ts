@@ -1,4 +1,4 @@
-import { api } from "./myFetch";
+import { api } from "../viewModel/session";
 
 export interface User {
   id: number;
